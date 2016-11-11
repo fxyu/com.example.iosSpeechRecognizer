@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<plugin xmlns="http://www.phonegap.com/ns/plugins/1.0"
+        id="com.example.iosSpeechRecognizer"
+        version="0.7.0">
+
+  <name>iosSpeechRecognizer</name>
+
+  <engines>
+    <engine name="cordova" version=">=3.4.0"/>
+  </engines>
+  
+  <js-module src="www/iosSpeechRecognizer.js" name="iosSpeechRecognizer">
+    <clobbers target="iosSpeechRecognizer" />
+  </js-module>
+
+  <platform name="ios">
+    
+    <config-file target="config.xml" parent="/widget">
+      <feature name="iosSpeechRecognizer">
+        <param name="ios-package" value="iosSpeechRecognizer" />
+      </feature>
+    </config-file>
+    <config-file target="*-Info.plist" parent="NSMicrophoneUsageDescription">
+      <string>For location recognition from speech</string>
+    </config-file>
+    <config-file target="*-Info.plist" parent="NSSpeechRecognitionUsageDescription">
+      <string>For location recognition from speech</string>
+    </config-file>
+
+    <header-file src="src/ios/iosSpeechRecognizer.h" target-dir="iosSpeechRecognizerPlugin"/>
+    <source-file src="src/ios/iosSpeechRecognizer.m" target-dir="iosSpeechRecognizerPlugin"/>
+  </platform>
+
+
+
+</plugin>

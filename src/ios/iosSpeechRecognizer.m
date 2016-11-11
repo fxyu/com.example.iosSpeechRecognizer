@@ -37,6 +37,13 @@
     
     [SFSpeechRecognizer requestAuthorization:^(SFSpeechRecognizerAuthorizationStatus status) {
         if (status != SFSpeechRecognizerAuthorizationStatusAuthorized){
+            UIAlertView *alert = [[UIAlertView alloc]
+                                  initWithTitle:@"Error"
+                                  message:@"Please Enable the Speech Recognizer in Setting!"
+                                  delegate:self
+                                  cancelButtonTitle:@"Cancel"
+                                  otherButtonTitles:nil];
+            [alert show];
             return;
         }
         
@@ -52,7 +59,7 @@
     
     CDVPluginResult* result = [CDVPluginResult
                                resultWithStatus:CDVCommandStatus_OK
-                               messageAsString:@"SPeech Recognizer init success"];
+                               messageAsString:@"Tring to init"];
     [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
 }
 

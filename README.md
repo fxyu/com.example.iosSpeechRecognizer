@@ -2,12 +2,12 @@
 
 A simple plugin that recongizie your speech using native ios API.
 
+P.S. This plugin only support cantonese on IOS devices only.
+
+Welcome for any suggestion on this plugin.
 
 ## Using
     
-
-Edit `www/js/index.js` and add the following code inside `onDeviceReady`
-
 For test the plugin: 
 
 ```js

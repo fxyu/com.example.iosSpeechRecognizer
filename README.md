@@ -1,6 +1,4 @@
-# Cordova Hello World Plugin
-
-Simple plugin that returns your string prefixed with hello.
+# Cordova IOS STT zh-hk Plugin
 
 A simple plugin that recongizie your speech using native ios API.
 

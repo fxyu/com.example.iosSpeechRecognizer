@@ -36,12 +36,12 @@ Get the Result and stop the recongition by this API
 ```
 
 
-Install iOS or Android platform
+Install the plugin
 
-    cordova platform add ios
-    cordova platform add android
+    cordova plugin add https://github.com/fxyu/com.example.iosSpeechRecognizer
     
 Run the code
+
 
 
 ## More Info

@@ -97,4 +97,39 @@
     [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
 }
 
+- (void) startDictationWithCallBack:(CDVInvokedUrlCommand*)command{
+    
+    @try {
+        [self.audioEngine startAndReturnError:nil];
+    }
+    @catch (NSException * e) {
+        NSLog(@"Exception: %@", e);
+    }
+    
+    //perform speech Recognizing
+    self.speechRequest = [[SFSpeechAudioBufferRecognitionRequest alloc] init];
+    self.currentSpeechTask = [self.speechRecognizer
+                              recognitionTaskWithRequest:self.speechRequest
+                              resultHandler:^(SFSpeechRecognitionResult * _Nullable result, NSError * _Nullable error) {
+                                  if (result == nil) {return;}
+                                  
+                                  self.result = result.bestTranscription.formattedString;
+                                  
+                                  if ([self.result length] > 5){
+                                      [self.audioEngine stop];
+                                      [self.speechRequest endAudio];
+                                      
+                                      CDVPluginResult* result = [CDVPluginResult
+                                                                 resultWithStatus:CDVCommandStatus_OK
+                                                                 messageAsString:self.result];
+                                      
+                                      [self.commandDelegate sendPluginResult:result
+                                                                  callbackId:self.cacheCommand.callbackId];
+                                  }
+                              }];
+    
+    //cache callbackID
+    self.cacheCommand = command;
+}
+
 @end

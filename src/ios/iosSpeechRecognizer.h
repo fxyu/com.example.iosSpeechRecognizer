@@ -10,10 +10,12 @@
 @property   SFSpeechAudioBufferRecognitionRequest *speechRequest;
 @property   SFSpeechRecognitionTask *currentSpeechTask;
 @property   NSString *result;
+@property   CDVInvokedUrlCommand *cacheCommand;
 
 - (void) greet:(CDVInvokedUrlCommand*)command;
 - (void) initTheSpeechRecognizer:(CDVInvokedUrlCommand*)command;
 - (void) startDictation:(CDVInvokedUrlCommand*)command;
 - (void) stopDictation:(CDVInvokedUrlCommand*)command;
+- (void) startDictationWithCallBack:(CDVInvokedUrlCommand*)command;
 
 @end

@@ -15,5 +15,9 @@ module.exports = {
         
     stopDictation: function (successCallback){
         cordova.exec(successCallback, null, "iosSpeechRecognizer", "stopDictation", []);
+    },
+
+    startDictationWithCallBack: function (successCallback){
+        cordova.exec(successCallback, null, "iosSpeechRecognizer", "startDictationWithCallBack", []);
     }
 };

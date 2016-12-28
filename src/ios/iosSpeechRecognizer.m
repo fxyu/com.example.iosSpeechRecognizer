@@ -5,13 +5,15 @@
 
 @implementation iosSpeechRecognizer
 
+bool timerIsOn = false;
+int  second = 0;
 
 - (void)greet:(CDVInvokedUrlCommand*)command
 {
-
+    
     NSString* name = [[command arguments] objectAtIndex:0];
     NSString* msg = [NSString stringWithFormat: @"Hello, %@", name];
-
+    
     UIAlertView *alert = [[UIAlertView alloc]
                           initWithTitle:@"Wait"
                           message:msg
@@ -19,12 +21,12 @@
                           cancelButtonTitle:@"Cancel"
                           otherButtonTitles:nil];
     [alert show];
-
+    
     CDVPluginResult* result = [CDVPluginResult
                                resultWithStatus:CDVCommandStatus_OK
                                messageAsString:[NSString stringWithFormat:@"String received : %@", msg]
                                ];
-
+    
     [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
 }
 
@@ -49,7 +51,7 @@
         
         [self.audioEngine.inputNode
          installTapOnBus:0
-         bufferSize:1024
+         bufferSize:256
          format:[self.audioEngine.inputNode outputFormatForBus:0]
          block:^(AVAudioPCMBuffer * _Nonnull buffer, AVAudioTime * _Nonnull when) {
              [self.speechRequest appendAudioPCMBuffer:buffer];
@@ -78,7 +80,7 @@
                               resultHandler:^(SFSpeechRecognitionResult * _Nullable result, NSError * _Nullable error) {
                                   if (result == nil) {return;}
                                   self.result = result.bestTranscription.formattedString;
-    }];
+                              }];
     
     CDVPluginResult* result = [CDVPluginResult
                                resultWithStatus:CDVCommandStatus_OK
@@ -107,6 +109,15 @@
     }
     
     //perform speech Recognizing
+    if (!timerIsOn){
+        self.timer = [NSTimer scheduledTimerWithTimeInterval:1 repeats:YES block:^(NSTimer * _Nonnull timer) {
+            second += 1;
+            if(second > 2){
+                [self disableRecognitionAndReturnString];
+            }
+        }];
+        timerIsOn = true;
+    }
     self.speechRequest = [[SFSpeechAudioBufferRecognitionRequest alloc] init];
     self.currentSpeechTask = [self.speechRecognizer
                               recognitionTaskWithRequest:self.speechRequest
@@ -114,22 +125,28 @@
                                   if (result == nil) {return;}
                                   
                                   self.result = result.bestTranscription.formattedString;
-                                  
-                                  if ([self.result length] > 5){
-                                      [self.audioEngine stop];
-                                      [self.speechRequest endAudio];
-                                      
-                                      CDVPluginResult* result = [CDVPluginResult
-                                                                 resultWithStatus:CDVCommandStatus_OK
-                                                                 messageAsString:self.result];
-                                      
-                                      [self.commandDelegate sendPluginResult:result
-                                                                  callbackId:self.cacheCommand.callbackId];
-                                  }
+                                  second = 1;
                               }];
     
     //cache callbackID
     self.cacheCommand = command;
+}
+
+- (void) disableRecognitionAndReturnString{
+    [self.timer invalidate];
+    second = 0;
+    timerIsOn = false;
+    
+    [self.audioEngine stop];
+    [self.speechRequest endAudio];
+    
+    CDVPluginResult* result = [CDVPluginResult
+                               resultWithStatus:CDVCommandStatus_OK
+                               messageAsString:self.result];
+    
+    [self.commandDelegate sendPluginResult:result
+                                callbackId:self.cacheCommand.callbackId];
+    
 }
 
 @end

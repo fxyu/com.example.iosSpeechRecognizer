@@ -11,6 +11,7 @@
 @property   SFSpeechRecognitionTask *currentSpeechTask;
 @property   NSString *result;
 @property   CDVInvokedUrlCommand *cacheCommand;
+@property   NSTimer *timer;
 
 - (void) greet:(CDVInvokedUrlCommand*)command;
 - (void) initTheSpeechRecognizer:(CDVInvokedUrlCommand*)command;

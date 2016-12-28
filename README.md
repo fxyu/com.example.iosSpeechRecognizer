@@ -35,6 +35,14 @@ Get the Result and stop the recongition by this API
     });
 ```
 
+UPDATE: 
+This method will return recongizied string after user speak more than 4 words.
+```js
+    iosSpeechRecognizer.startDictationWithCallBack(function(msg){
+        console.log(msg); // msg is the result
+    });
+```
+
 
 Install the plugin
 
